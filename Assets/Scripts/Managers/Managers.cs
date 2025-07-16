@@ -14,6 +14,7 @@ public class Managers : MonoBehaviour
     private SceneManagerEx _scene = new SceneManagerEx();
     private SoundManager _sound = new SoundManager();
     private UIManager _ui = new UIManager();
+    private MonsterManager _monster = new MonsterManager();
     
     private static Managers Instance { get { Init(); return s_instance; } }
     public static EventManager Event { get { return Instance._event; } }
@@ -23,6 +24,7 @@ public class Managers : MonoBehaviour
     public static SceneManagerEx Scene { get { return Instance._scene; } }
     public static SoundManager Sound { get { return Instance._sound; } }
     public static UIManager UI { get { return Instance._ui; } }
+    public static MonsterManager Monster { get { return Instance._monster; } }
 
     private void Awake()
     {
@@ -37,6 +39,7 @@ public class Managers : MonoBehaviour
     {
         Input.OnUpdate();
         Event.OnUpdate();
+        Monster.OnUpdate();
     }
 
     public static void OnSceneChanged()

@@ -1,9 +1,12 @@
 using UnityEditor.SettingsManagement;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class PlayerController : MonoBehaviour
 {
-    float _speed = 10.0f;
+    [SerializeField] float _limitX = 5.0f;
+
+    public float SpeedX { get; set; } = 10.0f;
 
     void Awake()
     {
@@ -31,6 +34,13 @@ public class PlayerController : MonoBehaviour
         }
 
         dir = dir.normalized;
-        transform.position += new Vector3(dir.x, 0.0f, 0.0f) * Time.deltaTime * _speed;
+
+        Vector3 newPos = transform.position + new Vector3(dir.x, 0.0f, 0.0f) * Time.deltaTime * SpeedX;
+        if (newPos.x >= _limitX || newPos.x <= -_limitX)
+        {
+            return;
+        }
+
+        transform.position = newPos;
     }
 }
