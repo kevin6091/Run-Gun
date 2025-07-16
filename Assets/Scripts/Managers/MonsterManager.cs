@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class MonsterManager : BaseManager
 {
-    float _spawnX = 2.25f;
-    float _spawnY = 1.5f;
-    float _spawnZ = 10.0f;
+    private float _spawnX = 3.5f;
+    private float _spawnY = 10.0f;
+    private float _spawnZ = 10.0f;
     private float _accCoolTime = 0.0f;
+    private float _spawnScale = 2.5f;
 
-    private int _basicMonsterCount = 1;
+    private int _basicMonsterCount = 3;
+
     public float SpawnCool { get; set; } = 3.0f;
 
     public override void Init()
@@ -36,12 +38,11 @@ public class MonsterManager : BaseManager
                     int randomIndex = UnityEngine.Random.Range(0, _basicMonsterCount);
                     if(spawnObj == null)
                     {
-                        spawnObj = Managers.Resource.Instantiate($"BasicMonster_{randomIndex}");
-                        spawnObj.transform.position = new Vector3(_spawnX, _spawnY, _spawnZ);
+                        SpawnMonster(randomIndex, true, ref spawnObj);
                     }
                     else
                     {
-                        Managers.Resource.Instantiate($"BasicMonster_{randomIndex}").transform.position = new Vector3(_spawnX, _spawnY, _spawnZ + 2.0f);
+                        SpawnMonster(randomIndex, true, ref spawnObj);
                     }
                 }
                 else
@@ -49,12 +50,11 @@ public class MonsterManager : BaseManager
                     int randomIndex = UnityEngine.Random.Range(0, _basicMonsterCount);
                     if (spawnObj == null)
                     {
-                        spawnObj = Managers.Resource.Instantiate($"BasicMonster_{randomIndex}");
-                        spawnObj.transform.position = new Vector3(-_spawnX, _spawnY, _spawnZ);
+                        SpawnMonster(randomIndex, false, ref spawnObj);
                     }
                     else
                     {
-                        Managers.Resource.Instantiate($"BasicMonster_{randomIndex}").transform.position = new Vector3(-_spawnX, _spawnY, _spawnZ + 2.0f);
+                        SpawnMonster(randomIndex, false, ref spawnObj);
                     }
                 }
             }
@@ -64,5 +64,21 @@ public class MonsterManager : BaseManager
     public override void Clear()
     {
         base.Clear();
+    }
+
+    private void SpawnMonster(int randomIndex, bool boolean, ref GameObject spawnObj)
+    {
+        if(boolean)
+        {
+            spawnObj = Managers.Resource.Instantiate($"BasicMonster_{randomIndex}");
+            spawnObj.transform.position = new Vector3(_spawnX, _spawnY, _spawnZ);
+            spawnObj.transform.localScale = Vector3.one * _spawnScale;
+        }
+        else
+        {
+            spawnObj = Managers.Resource.Instantiate($"BasicMonster_{randomIndex}");
+            spawnObj.transform.position = new Vector3(-_spawnX, _spawnY, _spawnZ + 2.0f);
+            spawnObj.transform.localScale = Vector3.one * _spawnScale;
+        }
     }
 }
