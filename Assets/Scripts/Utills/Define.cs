@@ -9,6 +9,12 @@ namespace Define
     {
     }
 
+    public enum Faction
+    {
+        Player,
+        Enemy,
+    }
+
     public enum EventState
     {
         Enter,
@@ -70,6 +76,7 @@ namespace Define
 
     public enum Events
     {
+        SpawnMonster,
         END,
     }
 }

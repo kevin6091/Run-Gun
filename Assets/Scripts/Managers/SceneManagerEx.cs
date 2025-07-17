@@ -15,6 +15,7 @@ public class SceneManagerEx : BaseManager
 
             return _currentScene;
         }
+
         private set { _currentScene = value; }
     }
 
