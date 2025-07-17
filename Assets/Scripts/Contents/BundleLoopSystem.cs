@@ -6,7 +6,7 @@ using System.Linq;
 
 public class BundleLoopSystem : MonoBehaviour
 {
-    List<Bundlable> _bundles = null;
+    List<Bundlable> _bundles = new List<Bundlable>();
 
     [SerializeField] GameObject _rootObject = null;
     [SerializeField] int _numBundle = 3;
@@ -40,20 +40,17 @@ public class BundleLoopSystem : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
-        if (_instance != null)
+        if(_instance == null)
         {
-            GameObject.Destroy(gameObject);
-            return;
+            _instance = this;
         }
-
-        _instance = this;
-        _bundles = new List<Bundlable>();
 
         for(int i = 0; i < _numBundle; i++)
         {            
             GameObject go = Managers.Resource.Instantiate("Bundle", _rootObject.transform);
             go.transform.position = _startPosition + (_bundleOffsetZ * Vector3.forward) * i;
             Bundlable bundle = go.GetOrAddComponent<Bundlable>();
+            Managers.Event.TriggerEvent(Define.Events.SpawnMonster);
         }
     }
 

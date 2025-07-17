@@ -2,14 +2,13 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using Unity.Android.Gradle;
 using UnityEngine;
-using static UnityEngine.Rendering.VirtualTexturing.Debugging;
 
 public class ScrollSystem : MonoBehaviour
 {
     [SerializeField] float _scrollSpeed = 2f;
     [SerializeField] Vector3 _scrollDir = Vector3.forward * -1f;
 
-    private List<Scrollable> _scrolls = null;
+    private List<Scrollable> _scrolls = new List<Scrollable>();
 
     static private ScrollSystem _instance = null;
     static public ScrollSystem Instance
@@ -37,14 +36,10 @@ public class ScrollSystem : MonoBehaviour
 
     void Awake()
     {
-        if (_instance != null)
+        if(_instance == null)
         {
-            GameObject.Destroy(gameObject);
-            return;
+            _instance = this;
         }
-
-        _instance = this;
-        _scrolls = new List<Scrollable>();
     }
 
     void Update()

@@ -72,6 +72,7 @@ public class Managers : MonoBehaviour
         Pool.Init();
         Event.Init();
         Input.Init();
+        Monster.Init();
     }
 
     static public void Clear()
