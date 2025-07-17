@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] float _limitX = 5.0f;
-    [SerializeField] PlayerStat playerStat = null;
+    PlayerStat _playerStat = null;
 
     void Awake()
     {
@@ -14,6 +14,8 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        _playerStat = GetComponent<PlayerStat>();
+
         Managers.Input.Actions[Define.InputType.Press] -= OnPressing;
         Managers.Input.Actions[Define.InputType.Press] += OnPressing;
     }
@@ -34,7 +36,7 @@ public class PlayerController : MonoBehaviour
 
         dir = dir.normalized;
 
-        Vector3 newPos = transform.position + new Vector3(dir.x, 0.0f, 0.0f) * Time.deltaTime * playerStat.SpeedX;
+        Vector3 newPos = transform.position + new Vector3(dir.x, 0.0f, 0.0f) * Time.deltaTime * _playerStat.SpeedX;
         if (newPos.x >= _limitX || newPos.x <= -_limitX)
         {
             return;

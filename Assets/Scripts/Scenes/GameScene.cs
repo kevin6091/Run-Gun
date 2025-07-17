@@ -7,19 +7,19 @@ using UnityEngine;
 
 public class GameScene : BaseScene
 {
-    //PlayerController _gamePlayer;
-    //public PlayerController GamePlayer 
-    //{ 
-    //    get 
-    //    { 
-    //        if (_gamePlayer == null)
-    //        {
-    //            _gamePlayer = GameObject.Find("Player").GetComponent<PlayerController>();
-    //        }
+    Player _gamePlayer;
+    public Player GamePlayer
+    {
+        get
+        {
+            if (_gamePlayer == null)
+            {
+                _gamePlayer = GameObject.Find("Player").GetComponent<Player>();
+            }
 
-    //        return _gamePlayer; 
-    //    }
-    //} 
+            return _gamePlayer;
+        }
+    }
 
     protected override void Init()
     {
