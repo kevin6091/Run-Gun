@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da8b8a26154a5d84e90000afbd37de0f, type: 3}
   m_Name: Shotgun
   m_EditorClassIdentifier: 
-  _type: 0
+  _type: 1
   _scale: 2
   _bulletPrefab: {fileID: 6018189911352314941, guid: 51f5dbc7da160f8429ddeb38c21b6af2, type: 3}
   _modelPrefab: {fileID: 4205521026231025682, guid: f7a69565ab2ff984789da792b0969f4b, type: 3}
   _bulletSpeedBase: 30
   _fireDirs:
   - {x: 0, y: 0, z: 1}
-  - {x: 0.3, y: 0, z: 1}
-  - {x: -0.3, y: 0, z: 1}
+  - {x: 0.28734788, y: 0, z: 0.95782626}
+  - {x: -0.28734788, y: 0, z: 0.95782626}

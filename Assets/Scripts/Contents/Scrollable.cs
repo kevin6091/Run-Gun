@@ -7,13 +7,8 @@ public class Scrollable : MonoBehaviour
 
     private void OnEnable()
     {
-        ScrollSystem.Instance.AddScrollable(this);
         removeEvent = null;
-    }
-
-    private void OnDestroy()
-    {
-        removeEvent?.Invoke(this);
+        ScrollSystem.Instance.AddScrollable(this);
     }
 
     private void OnDisable()

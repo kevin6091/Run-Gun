@@ -8,6 +8,8 @@ public class ScrollSystem : MonoBehaviour
     [SerializeField] float _scrollSpeed = 2f;
     [SerializeField] Vector3 _scrollDir = Vector3.forward * -1f;
 
+    public Vector3 scrollVelocity => _scrollSpeed * _scrollDir;
+
     private List<Scrollable> _scrolls = new List<Scrollable>();
 
     static private ScrollSystem _instance = null;

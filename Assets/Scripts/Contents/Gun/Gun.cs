@@ -28,11 +28,14 @@ public class Gun : MonoBehaviour
         transform.localScale = Vector3.one * _gunInfo.scale;
     }
 
+    float accTime = 0f;
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetMouseButtonDown(0))
+        accTime += Time.deltaTime; 
+        while(accTime > 0.5f)
         {
+            accTime -= 0.5f;
             Fire();
         }
     }
