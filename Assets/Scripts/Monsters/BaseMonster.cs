@@ -26,7 +26,9 @@ public class BaseMonster : MonoBehaviour
     [field: SerializeField] public float AttackRange { get; set; } = 0.0f;
     [field: SerializeField] public float CollisionRange { get; set; } = 0.0f;
 
-    protected void ResetData()
+    public bool IsDead => CurState == MonsterState.Die;
+
+    protected void OnEnable()
     {
         HP = MaxHP;
         CurState = MonsterState.Idle;
@@ -58,8 +60,6 @@ public class BaseMonster : MonoBehaviour
         // 플레이어 지나쳤는지 -> 삭제
         if (Player.transform.position.z - 10.0f > transform.position.z)
         {
-            ResetData();
-            
             Managers.Monster.Monsters.Remove(gameObject);
             Managers.Resource.Destroy(gameObject, 0.0f);
         }
@@ -67,23 +67,23 @@ public class BaseMonster : MonoBehaviour
 
     public virtual void OnHit(float damage)
     {
-        if (CurState != MonsterState.Attack)
+        if (CurState != MonsterState.Die)
         {
-            CurState = MonsterState.Hit;
-
-            PlayAnim("Hit", 0.1f);
-
             HP = Mathf.Max(HP - (int)damage, 0);
-            if(0 == HP)
+            if (0 == HP)
             {
                 //  ItemBox 생성
                 //  몬스터타입에따라 스몰박스, 빅박스 선택하여 
                 //  오브젝트 생성
 
-                //  Test
+                CurState = MonsterState.Die;
 
-                Managers.Resource.Destroy(gameObject, 0f);
+                return;
             }
+
+            CurState = MonsterState.Hit;
+
+            PlayAnim("Hit", 0.1f);
         }
     }
 
@@ -103,7 +103,15 @@ public class BaseMonster : MonoBehaviour
     {
         if (LastState != curState)
         {
-            PlayAnimRandom((0, 3), name, 0.15f);
+            PlayAnimRandom((0, 3), name, interpol);
+        }
+    }
+
+    protected void PlayAnim_Unique(string name, float interpol, MonsterState curState)
+    {
+        if (LastState != curState)
+        {
+            PlayAnim(name, interpol);
         }
     }
 
@@ -116,5 +124,18 @@ public class BaseMonster : MonoBehaviour
     protected void PlayAnim(string name, float interpol)
     {
         Anim.CrossFadeInFixedTime(name, interpol);
+    }
+
+    protected bool IsAnimOverTime(string name, float time)
+    {
+        if (Anim.IsInTransition(0) == false)
+        {
+            if (CurAnimState.IsName(name) && CurAnimState.normalizedTime >= time)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

@@ -8,11 +8,15 @@ public class PlayerStat : MonoBehaviour
     [field : SerializeField] public float Critical { get; set; } = 0.0f;
     [field : SerializeField] public float Defence { get; set; } = 0.0f;
 
-    [field: SerializeField] public int GunDamage { get; set; } = 10;
     [field : SerializeField] public float GunCoolDown { get; set; } = 1.0f;
+    [field: SerializeField] public int GunDamage { get; set; } = 10;
+    [field: SerializeField] public float GunDistance { get; set; } = 10;
+    [field: SerializeField] public float GunSpeed { get; set; } = 10;
 
-    [field : SerializeField] public float DroneCoolDown { get; set; } = 1.0f;
+    [field : SerializeField] public float DroneCoolDown { get; set; } = 1.0f; 
     [field: SerializeField] public int DroneDamage { get; set; } = 10;
+    [field: SerializeField] public float DroneDistance { get; set; } = 10;
+    [field: SerializeField] public float DroneSpeed { get; set; } = 10;
     [field: SerializeField] public int NumDrone { get; set; } = 0;
 
     [field : SerializeField] public float TankCoolDown { get; set; } = 1.0f;

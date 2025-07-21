@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 
 public class Gun : MonoBehaviour
 {
@@ -32,6 +33,7 @@ public class Gun : MonoBehaviour
     void Start()
     {
         transform.localScale = Vector3.one * _gunInfo.scale;
+        transform.localPosition += _gunInfo.offset;
     }
 
     float accTime = 0f;

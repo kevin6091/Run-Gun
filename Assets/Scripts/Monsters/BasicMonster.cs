@@ -19,35 +19,37 @@ public class BasicMonster : BaseMonster
 
                 PlayAnimRandom_Unique((0, 3), "Idle", 0.1f, MonsterState.Idle);
 
-                if(Anim.IsInTransition(0) == false)
+                if (IsAnimOverTime("Idle", 1.0f))
                 {
-                    if (CurAnimState.normalizedTime >= 1.0f)
-                    {
-                        PlayAnimRandom((0, 3), "Idle", 0.1f);
-                    }
+                    PlayAnimRandom((0, 3), "Idle", 0.1f);
                 }
                 
                 break;
 
             case MonsterState.Hit:
 
-                if (Anim.IsInTransition(0) == false)
+                if (IsAnimOverTime("Hit", 1.0f))
                 {
-                    if (CurAnimState.normalizedTime >= 1.0f)
-                    {
-                        CurState = MonsterState.Idle;
-                    }
+                    CurState = MonsterState.Idle;
                 }
 
                 break;
 
             case MonsterState.Attack:
 
-                PlayAnimRandom_Unique((0, 2), "Attack", 0.15f, MonsterState.Attack);
+                //PlayAnimRandom_Unique((0, 2), "Attack", 0.15f, MonsterState.Attack);
 
                 break;
 
             case MonsterState.Die:
+
+                PlayAnim_Unique("Die", 0.0f, MonsterState.Die);
+
+                if(IsAnimOverTime("Die", 1.0f))
+                {
+                    Managers.Resource.Destroy(gameObject, 0f);
+                }
+
                 break;
 
             case MonsterState.End:

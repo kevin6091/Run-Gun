@@ -12,11 +12,13 @@ public class GunInfo : ScriptableObject
     [SerializeField] GameObject _modelPrefab;
     [SerializeField] float _bulletSpeedBase;
     [SerializeField] List<Vector3> _fireDirs;
+    [SerializeField] Vector3 _offset;
 
     public Gun.Type type => _type;
     public float scale => _scale;
     public float speedBase => _bulletSpeedBase;
     public List<Vector3> dirs => _fireDirs;
+    public Vector3 offset => _offset;
 
     private void Awake()
     {

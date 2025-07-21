@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Shotgun
   m_EditorClassIdentifier: 
   _type: 1
-  _scale: 2
+  _scale: 1.3
   _bulletPrefab: {fileID: 6018189911352314941, guid: 51f5dbc7da160f8429ddeb38c21b6af2, type: 3}
   _modelPrefab: {fileID: 4205521026231025682, guid: f7a69565ab2ff984789da792b0969f4b, type: 3}
   _bulletSpeedBase: 30
@@ -21,3 +21,4 @@ MonoBehaviour:
   - {x: 0, y: 0, z: 1}
   - {x: 0.28734788, y: 0, z: 0.95782626}
   - {x: -0.28734788, y: 0, z: 0.95782626}
+  _offset: {x: 0.348, y: 1.473, z: 0.788}
