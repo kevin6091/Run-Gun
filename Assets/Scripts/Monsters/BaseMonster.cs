@@ -19,7 +19,7 @@ public class BaseMonster : MonoBehaviour
     protected MonsterState LastState { get; set; } = MonsterState.End;
     protected Animator Anim { get; set; }
 
-    public int HP { get; set; } = 0;
+    public int HP { get; set; } = 30;
 
     [field: SerializeField] float AttackRange { get; set; } = 0.0f;
     [field: SerializeField] float CollisionRange { get; set; } = 0.0f;
@@ -54,6 +54,26 @@ public class BaseMonster : MonoBehaviour
         }
     }
 
+    public virtual void OnHit(float damage)
+    {
+        if (CurState != MonsterState.Attack)
+        {
+            CurState = MonsterState.Hit;
+
+            HP = Mathf.Max(HP - (int)damage, 0);
+            if(0 == HP)
+            {
+                //  ItemBox 생성
+                //  몬스터타입에따라 스몰박스, 빅박스 선택하여 
+                //  오브젝트 생성
+
+                //  Test
+
+                Managers.Resource.Destroy(gameObject, 0f);
+            }
+        }
+    }
+
     public virtual void OnCollision(GameObject ohter)
     {
         // 플레이어랑
@@ -62,17 +82,6 @@ public class BaseMonster : MonoBehaviour
             if (CurState != MonsterState.Die)
             {
                 CurState = MonsterState.Explosion;
-            }
-        }
-
-        // 총알이랑
-        if (ohter.tag == "Bullet")
-        {
-            // HP 까임
-
-            if (CurState != MonsterState.Attack)
-            {
-                CurState = MonsterState.Hit;
             }
         }
     }

@@ -75,9 +75,31 @@ public class Bullet : MonoBehaviour
 
             float reletiveDist = (rayEnd - rayStart).magnitude;
             _lifeTime = reletiveDist / reletiveSpeed;
+
+            GameObject go = hit.transform.gameObject;
+            BaseMonster monster = go.GetComponent<BaseMonster>();
+            StartCoroutine(LatedHit(_lifeTime, monster));
         }
 
         isCheckRay = true;
-        Managers.Resource.Destroy(gameObject, _lifeTime);
+    }
+
+    IEnumerator LatedHit(float time, BaseMonster monster)
+    {
+        if (null == monster)
+            yield break;
+
+        yield return new WaitForSeconds(time);
+
+
+        //  이펙트 생성및 총알 라이프 타임관련 처리 여기서 하기
+
+        monster.OnHit(ComputeDamage());
+        Managers.Resource.Destroy(gameObject, 0f);
+    }
+
+    float ComputeDamage()
+    {
+        return _damageBase;
     }
 }

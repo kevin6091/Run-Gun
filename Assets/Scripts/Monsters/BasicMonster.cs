@@ -34,11 +34,14 @@ public class BasicMonster : BaseMonster
 
             case MonsterState.Hit:
 
-                PlayAnim("Hit", 0.15f);
+                PlayAnim("Hit", 0f);
 
-                if (nextAnimState.normalizedTime >= 1.0f)
+                if (Anim.IsInTransition(0) == false)
                 {
-                    CurState = MonsterState.Idle;
+                    if (curAnimState.normalizedTime >= 1.0f)
+                    {
+                        CurState = MonsterState.Idle;
+                    }
                 }
 
                 break;
