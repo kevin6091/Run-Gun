@@ -12,6 +12,8 @@ public class MonsterManager : BaseManager
 
     private int _basicMonsterCount = 3;
 
+    public Dictionary<GameObject, BaseMonster> Monsters { get; set; } = new Dictionary<GameObject, BaseMonster>();
+
     public override void Init()
     {
         base.Init();
@@ -64,7 +66,7 @@ public class MonsterManager : BaseManager
                 }
                 else
                 {
-                    SpawnMonster(randomIndex, true, bundlePos, ref spawnObj);
+                    SpawnMonster(randomIndex, false, bundlePos, ref spawnObj);
                 }
             }
             else
@@ -72,7 +74,7 @@ public class MonsterManager : BaseManager
                 int randomIndex = UnityEngine.Random.Range(0, _basicMonsterCount);
                 if (spawnObj == null)
                 {
-                    SpawnMonster(randomIndex, false, bundlePos, ref spawnObj);
+                    SpawnMonster(randomIndex, true, bundlePos, ref spawnObj);
                 }
                 else
                 {
