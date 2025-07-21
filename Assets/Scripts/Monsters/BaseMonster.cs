@@ -18,11 +18,20 @@ public class BaseMonster : MonoBehaviour
     protected MonsterState CurState { get; set; } = MonsterState.End;
     protected MonsterState LastState { get; set; } = MonsterState.End;
     protected Animator Anim { get; set; }
+    protected AnimatorStateInfo CurAnimState { get; set; }
+    protected AnimatorStateInfo NextAnimState { get; set; }
 
-    public int HP { get; set; } = 30;
+    [field : SerializeField] public int HP { get; set; } = 30;
+    [field: SerializeField] public int MaxHP { get; set; } = 30;
+    [field: SerializeField] public float AttackRange { get; set; } = 0.0f;
+    [field: SerializeField] public float CollisionRange { get; set; } = 0.0f;
 
-    [field: SerializeField] float AttackRange { get; set; } = 0.0f;
-    [field: SerializeField] float CollisionRange { get; set; } = 0.0f;
+    protected void ResetData()
+    {
+        HP = MaxHP;
+        CurState = MonsterState.Idle;
+        LastState = MonsterState.Idle;
+    }
 
     protected virtual void Start()
     {
@@ -32,6 +41,10 @@ public class BaseMonster : MonoBehaviour
 
     protected virtual void Update()
     {
+        // AnimState Update
+        CurAnimState = Anim.GetCurrentAnimatorStateInfo(0);
+        NextAnimState = Anim.GetNextAnimatorStateInfo(0);
+
         // 플레이어 충돌검사
         if ((Player.transform.position - transform.position).magnitude <= CollisionRange)
         {
@@ -45,10 +58,8 @@ public class BaseMonster : MonoBehaviour
         // 플레이어 지나쳤는지 -> 삭제
         if (Player.transform.position.z - 10.0f > transform.position.z)
         {
-            // HP 초기화
-            CurState = MonsterState.Idle;
-            LastState = MonsterState.Idle;
-
+            ResetData();
+            
             Managers.Monster.Monsters.Remove(gameObject);
             Managers.Resource.Destroy(gameObject, 0.0f);
         }
@@ -59,6 +70,8 @@ public class BaseMonster : MonoBehaviour
         if (CurState != MonsterState.Attack)
         {
             CurState = MonsterState.Hit;
+
+            PlayAnim("Hit", 0.1f);
 
             HP = Mathf.Max(HP - (int)damage, 0);
             if(0 == HP)

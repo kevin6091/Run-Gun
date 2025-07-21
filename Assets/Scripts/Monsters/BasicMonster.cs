@@ -13,9 +13,6 @@ public class BasicMonster : BaseMonster
     {
         base.Update();
 
-        AnimatorStateInfo curAnimState = Anim.GetCurrentAnimatorStateInfo(0);
-        AnimatorStateInfo nextAnimState = Anim.GetNextAnimatorStateInfo(0);
-
         switch (CurState)
         {
             case MonsterState.Idle:
@@ -24,7 +21,7 @@ public class BasicMonster : BaseMonster
 
                 if(Anim.IsInTransition(0) == false)
                 {
-                    if (curAnimState.normalizedTime >= 1.0f)
+                    if (CurAnimState.normalizedTime >= 1.0f)
                     {
                         PlayAnimRandom((0, 3), "Idle", 0.1f);
                     }
@@ -34,11 +31,9 @@ public class BasicMonster : BaseMonster
 
             case MonsterState.Hit:
 
-                PlayAnim("Hit", 0f);
-
                 if (Anim.IsInTransition(0) == false)
                 {
-                    if (curAnimState.normalizedTime >= 1.0f)
+                    if (CurAnimState.normalizedTime >= 1.0f)
                     {
                         CurState = MonsterState.Idle;
                     }
