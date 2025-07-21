@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerStat
+public class PlayerStat : MonoBehaviour
 {
     [field : SerializeField] public int HP { get; set; } = 50;
     [field : SerializeField] public float SpeedX { get; set; } = 10.0f;
