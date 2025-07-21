@@ -599,6 +599,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 8199776741730404999, guid: 29c553967525727489f0ec0960b894bd, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 8827236878092177469, guid: 29c553967525727489f0ec0960b894bd, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -902,7 +906,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e9f38c3884e8c149a509d22b7066c95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _scrollSpeed: 2
+  _scrollSpeed: 20
   _scrollDir: {x: -0, y: -0, z: -1}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
