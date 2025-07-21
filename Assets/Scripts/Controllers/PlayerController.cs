@@ -1,3 +1,4 @@
+using bullet.fx.pack;
 using UnityEditor.SettingsManagement;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -5,11 +6,41 @@ using UnityEngine.UIElements;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] float _limitX = 5.0f;
+    [SerializeField] Gun _gun = null;
     PlayerStat _playerStat = null;
+    Animator _anim = null;
 
     void Awake()
     {
-        
+        _anim = GetComponent<Animator>();
+    }
+
+    private void OnAnimatorIK(int layerIndex)
+    {
+        if (_gun == null || _anim == null)
+            return;
+
+        if(layerIndex == 0)
+        {
+            GameObject lHand = _gun.leftHandSocket;
+            GameObject rHand = _gun.rightHandSocket;
+
+            SetIK(1f);
+
+            _anim.SetIKPosition(AvatarIKGoal.LeftHand, lHand.transform.position);
+            _anim.SetIKPosition(AvatarIKGoal.RightHand, rHand.transform.position);
+            _anim.SetIKRotation(AvatarIKGoal.LeftHand, lHand.transform.rotation);
+            _anim.SetIKRotation(AvatarIKGoal.RightHand, rHand.transform.rotation);
+
+        }
+    }
+
+    void SetIK(float weight)
+    {
+        _anim.SetIKPositionWeight(AvatarIKGoal.LeftHand, weight);
+        _anim.SetIKRotationWeight(AvatarIKGoal.LeftHand, weight);
+        _anim.SetIKPositionWeight(AvatarIKGoal.RightHand, weight);
+        _anim.SetIKRotationWeight(AvatarIKGoal.RightHand, weight);
     }
 
     void Start()

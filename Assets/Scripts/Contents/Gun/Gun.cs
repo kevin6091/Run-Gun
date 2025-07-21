@@ -17,6 +17,12 @@ public class Gun : MonoBehaviour
     [SerializeField] ParticleSystem _muzzleFlash = null;
     [SerializeField] Animator _anim = null;
 
+    [SerializeField] GameObject _leftHandSocket = null;
+    [SerializeField] GameObject _rightHandSocket = null;
+
+    public GameObject leftHandSocket => _leftHandSocket;
+    public GameObject rightHandSocket => _rightHandSocket;
+
     private void Awake()
     {
         _muzzleFlash.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
