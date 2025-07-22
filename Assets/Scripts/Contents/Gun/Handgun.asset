@@ -19,3 +19,4 @@ MonoBehaviour:
   _bulletSpeedBase: 30
   _fireDirs:
   - {x: 0, y: 0, z: 1}
+  _offset: {x: 0.29, y: 1.493, z: 0.559}

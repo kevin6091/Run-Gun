@@ -22,11 +22,16 @@ Shader "Lpk/LightModel/ToonLightBase"
         [Space]   
         _OutlineWidth      ("OutlineWidth", Range(0.0, 1.0))      = 0.15
         _OutlineColor      ("OutlineColor", Color)                = (0.0, 0.0, 0.0, 1)
+
+        [Space]
+        _DissolveNoise  ("Dissolve Noise", 2D) = "white" {}
+        _DissolveAmount ("Dissolve Amount", Range(0,1)) = 0.0
     }
     SubShader
     {
         Tags { "RenderType" = "Opaque" "RenderPipeline" = "UniversalPipeline" }
-        
+        ZWrite On
+
         Pass
         {
             Name "UniversalForward"
@@ -56,6 +61,7 @@ Shader "Lpk/LightModel/ToonLightBase"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Shadows.hlsl"
 
             TEXTURE2D(_BaseMap); SAMPLER(sampler_BaseMap);
+            TEXTURE2D(_DissolveNoise); SAMPLER(sampler_DissolveNoise);
 
             CBUFFER_START(UnityPerMaterial)
                 float4 _BaseColor;
@@ -67,6 +73,7 @@ Shader "Lpk/LightModel/ToonLightBase"
                 float _RimStepSmooth;
                 float _RimStep;
                 float4 _RimColor;
+                float _DissolveAmount;
             CBUFFER_END
 
             struct Attributes
@@ -125,6 +132,26 @@ Shader "Lpk/LightModel/ToonLightBase"
                 UNITY_SETUP_INSTANCE_ID(input);
 
                 float2 uv = input.uv;
+
+                float3 edgeColor = float3(1.0f, 1.0f, 1.0f);
+
+                if(_DissolveAmount >= 0.001f)
+                {
+                    float noise = SAMPLE_TEXTURE2D(_DissolveNoise,sampler_DissolveNoise, uv * 4.0f).r;
+                
+                    float edge = noise - _DissolveAmount;
+
+                        if(edge < 0.3f)
+                        {
+                            edgeColor = lerp(float3(0.0f,0.0f,0.0f), float3(0.85f, 0.0f, 0.0f), edge * 10.0f);
+                        }
+
+                        if(edge < 0.001f)
+                        {
+                            discard;
+                        }
+                }
+
                 float3 N = normalize(input.normalWS.xyz);
                 float3 T = normalize(input.tangentWS.xyz);
                 float3 B = normalize(input.bitangentWS.xyz);
@@ -163,7 +190,10 @@ Shader "Lpk/LightModel/ToonLightBase"
             
                 float3 finalColor = diffuse + ambient + specular;
                 finalColor = MixFog(finalColor, input.fogCoord);
-                return float4(finalColor , 1.0);
+                
+                return float4(finalColor * edgeColor, 1.0);
+
+
             }
             ENDHLSL
         }
@@ -183,17 +213,25 @@ Shader "Lpk/LightModel/ToonLightBase"
             #pragma multi_compile_fog
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             
+            TEXTURE2D(_DissolveNoise); SAMPLER(sampler_DissolveNoise);
+
+            CBUFFER_START(UnityPerMaterial)
+                float _DissolveAmount;
+            CBUFFER_END
+
             struct appdata
             {
                 float4 vertex : POSITION;
                 float3 normal : NORMAL;
                 float4 tangent : TANGENT;
+                float2 uv : TEXCOORD0;
             };
 
             struct v2f
             {
                 float4 pos      : SV_POSITION;
-                float4 fogCoord	: TEXCOORD0;	
+                float4 fogCoord	: TEXCOORD0;
+                float2 uv : TEXCOORD1;
             };
             
             float _OutlineWidth;
@@ -202,16 +240,23 @@ Shader "Lpk/LightModel/ToonLightBase"
             v2f vert(appdata v)
             {
                 v2f o;
+
                 VertexPositionInputs vertexInput = GetVertexPositionInputs(v.vertex.xyz);
                 o.pos = TransformObjectToHClip(float4(v.vertex.xyz + v.normal * _OutlineWidth * 0.1 ,1));
                 o.fogCoord = ComputeFogFactor(vertexInput.positionCS.z);
-
+                o.uv = v.uv;
                 return o;
             }
 
             float4 frag(v2f i) : SV_Target
             {
                 float3 finalColor = MixFog(_OutlineColor, i.fogCoord);
+
+                if(_DissolveAmount > 0.05f)
+                {
+                    discard;
+                }
+
                 return float4(finalColor,1.0);
             }
             

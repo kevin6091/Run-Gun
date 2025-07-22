@@ -1,4 +1,6 @@
+using System.Collections;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class BasicMonster : BaseMonster
 {
@@ -7,6 +9,11 @@ public class BasicMonster : BaseMonster
         base.Start();
 
         CurState = MonsterState.Idle;
+
+        Material material = Renderer.material;
+        Material newMaterial = Material = new Material(material);
+
+        Renderer.material = Material;
     }
 
     protected override void Update()
@@ -19,11 +26,11 @@ public class BasicMonster : BaseMonster
 
                 PlayAnimRandom_Unique((0, 3), "Idle", 0.1f, MonsterState.Idle);
 
-                if (IsAnimOverTime("Idle", 1.0f))
+                if (IsAnimOverTime("Idle0", 1.0f) || IsAnimOverTime("Idle1", 1.0f) || IsAnimOverTime("Idle2", 1.0f))
                 {
                     PlayAnimRandom((0, 3), "Idle", 0.1f);
                 }
-                
+
                 break;
 
             case MonsterState.Hit:
@@ -45,7 +52,15 @@ public class BasicMonster : BaseMonster
 
                 PlayAnim_Unique("Die", 0.0f, MonsterState.Die);
 
-                if(IsAnimOverTime("Die", 1.0f))
+                if(IsStateEnter(MonsterState.Die))
+                {
+                    StartCoroutine(Co_KnockBack());
+                }
+
+                DissolveAmount += Time.deltaTime * 2.0f;
+                Material.SetFloat("_DissolveAmount", DissolveAmount);
+
+                if (IsAnimOverTime("Die", 1.0f))
                 {
                     Managers.Resource.Destroy(gameObject, 0f);
                 }
@@ -67,5 +82,25 @@ public class BasicMonster : BaseMonster
         base.OnCollision(other);
 
 
+    }
+
+    IEnumerator Co_KnockBack()
+    {
+        yield return null;
+
+        float accel = 10.0f;
+
+        while (true)
+        {
+            accel -= Time.deltaTime * 2.0f;
+
+            transform.position += transform.forward * -1.0f * Time.deltaTime * accel;
+
+            if(accel <= 0.0f)
+            {
+                yield break;
+            }
+            yield return null;
+        }
     }
 }

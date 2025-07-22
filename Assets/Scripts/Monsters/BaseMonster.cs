@@ -1,3 +1,4 @@
+using Autodesk.Fbx;
 using Define;
 using NUnit;
 using UnityEngine;
@@ -20,25 +21,36 @@ public class BaseMonster : MonoBehaviour
     protected Animator Anim { get; set; }
     protected AnimatorStateInfo CurAnimState { get; set; }
     protected AnimatorStateInfo NextAnimState { get; set; }
+    protected Renderer Renderer { get; set; }
+    protected float DissolveAmount { get; set; }
 
     [field : SerializeField] public int HP { get; set; } = 30;
     [field: SerializeField] public int MaxHP { get; set; } = 30;
     [field: SerializeField] public float AttackRange { get; set; } = 0.0f;
     [field: SerializeField] public float CollisionRange { get; set; } = 0.0f;
+    public Material Material { get; set; }
 
     public bool IsDead => CurState == MonsterState.Die;
+    
 
     protected void OnEnable()
     {
         HP = MaxHP;
         CurState = MonsterState.Idle;
         LastState = MonsterState.Idle;
+        DissolveAmount = 0.0f;
+        
+        if(Material != null)
+        {
+            Material.SetFloat("_DissolveAmount", DissolveAmount);
+        }
     }
 
     protected virtual void Start()
     {
         Player = (Managers.Scene.CurrentScene as GameScene).GamePlayer;
         Anim = GetComponent<Animator>();
+        Renderer = GetComponentInChildren<Renderer>();
     }
 
     protected virtual void Update()
@@ -99,9 +111,19 @@ public class BaseMonster : MonoBehaviour
         }
     }
 
+    protected bool IsStateEnter(MonsterState curState)
+    {
+        if(CurState != LastState && CurState == curState)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     protected void PlayAnimRandom_Unique((int begin, int end) range, string name, float interpol, MonsterState curState)
     {
-        if (LastState != curState)
+        if (CurState != LastState && CurState == curState)
         {
             PlayAnimRandom((0, 3), name, interpol);
         }

@@ -33,6 +33,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7128070615563287932}
+  - {fileID: 7394465789123952258}
+  - {fileID: 5160163923597960533}
   m_Father: {fileID: 8931983043453028410}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3688925116347055905
@@ -110,6 +112,37 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!1 &4309183441975129170
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7394465789123952258}
+  m_Layer: 0
+  m_Name: LHandSocet
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7394465789123952258
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4309183441975129170}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.00014540365, y: -0.00066384237, z: 0.40614596, w: 0.9138079}
+  m_LocalPosition: {x: 0.035, y: -0.108, z: 0.083}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8550294156661971481}
+  m_LocalEulerAnglesHint: {x: 0.016, y: -0.076, z: 47.926}
 --- !u!1 &5392837239392150758
 GameObject:
   m_ObjectHideFlags: 0
@@ -161,8 +194,8 @@ MonoBehaviour:
   _gunFire: {fileID: 7720186921987503550}
   _muzzleFlash: {fileID: 4471152127590983144}
   _anim: {fileID: 2426234995166563388}
-  _leftHandSocket: {fileID: 0}
-  _rightHandSocket: {fileID: 0}
+  _leftHandSocket: {fileID: 4309183441975129170}
+  _rightHandSocket: {fileID: 8173463308615724122}
 --- !u!1 &7720186921987503550
 GameObject:
   m_ObjectHideFlags: 0
@@ -194,6 +227,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8931983043453028410}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8173463308615724122
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5160163923597960533}
+  m_Layer: 0
+  m_Name: RHandSocet
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5160163923597960533
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8173463308615724122}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0.64685696, w: 0.7626114}
+  m_LocalPosition: {x: 0.081, y: -0.311, z: 0.144}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8550294156661971481}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -80.61}
 --- !u!1001 &4381714175840198668
 PrefabInstance:
   m_ObjectHideFlags: 0
