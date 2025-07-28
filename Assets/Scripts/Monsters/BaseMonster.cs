@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class BaseMonster : MonoBehaviour
 {
-    protected enum MonsterState
+    public enum MonsterState
     {
         Idle,
         Hit,
@@ -16,7 +16,7 @@ public class BaseMonster : MonoBehaviour
     }
 
     protected Player Player { get; set; } = null;
-    protected MonsterState CurState { get; set; } = MonsterState.End;
+    public MonsterState CurState { get; set; } = MonsterState.End;
     protected MonsterState LastState { get; set; } = MonsterState.End;
     protected Animator Anim { get; set; }
     protected AnimatorStateInfo CurAnimState { get; set; }

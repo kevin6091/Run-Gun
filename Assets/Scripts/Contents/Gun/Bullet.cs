@@ -1,3 +1,4 @@
+using Autodesk.Fbx;
 using System.Collections;
 using UnityEngine;
 
@@ -15,10 +16,19 @@ public class Bullet : MonoBehaviour
 
     float accTime = 0f;
 
+    PlayerStat PlayerStat { get; set; }
+
     private void OnEnable()
     {
         isCheckRay = false;
         isHit = false;
+
+        if (PlayerStat == null)
+        {
+            PlayerStat = (Managers.Scene.CurrentScene as GameScene).GamePlayer.PlayerStat;
+        }
+
+        _lifeTime = PlayerStat.GunLifeTime;
 
         accTime = 0f;
     }
@@ -47,6 +57,15 @@ public class Bullet : MonoBehaviour
 
         Debug.DrawLine(rayStart, rayEnd, Color.red);        //  Reletive
         Debug.DrawLine(rayStart, rayStart + transform.forward * speed * _lifeTime, Color.blue);       //  Absolute
+
+        // 민재 추가
+        // LifeTime
+        // 이거 바로 죽이면 이펙트 생성안됨
+        //accTime += Time.deltaTime;
+        //if (accTime >= _lifeTime)
+        //{
+        //    Managers.Resource.Destroy(gameObject, 0.0f);
+        //}
     }
 
     private void OnDrawGizmos()
@@ -70,7 +89,6 @@ public class Bullet : MonoBehaviour
 
         if (Physics.Raycast(transform.position, reletiveDir, out RaycastHit hit, reletiveSpeed * _lifeTime, layerMask))
         {
-            isHit = true;
             rayEnd = hit.point;
 
             float reletiveDist = (rayEnd - rayStart).magnitude;
@@ -78,6 +96,7 @@ public class Bullet : MonoBehaviour
 
             GameObject go = hit.transform.gameObject;
             BaseMonster monster = go.GetComponent<BaseMonster>();
+            
             StartCoroutine(LatedHit(_lifeTime, monster));
         }
 
@@ -91,9 +110,13 @@ public class Bullet : MonoBehaviour
 
         yield return new WaitForSeconds(time);
 
-
+        if (monster.CurState == BaseMonster.MonsterState.Die) //민재 추가
+        {
+            isCheckRay = false;
+            yield break;
+        }
         //  이펙트 생성및 총알 라이프 타임관련 처리 여기서 하기
-
+        isHit = true;
         monster.OnHit(ComputeDamage());
         Managers.Resource.Destroy(gameObject, 0f);
     }
