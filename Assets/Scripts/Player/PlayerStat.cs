@@ -13,7 +13,7 @@ public class PlayerStat : MonoBehaviour
     [field: SerializeField] public float GunLifeTime { get; set; } = 2;
     [field: SerializeField] public float GunSpeed { get; set; } = 10;
 
-    [field : SerializeField] public float DroneCoolDown { get; set; } = 1.0f; 
+    [field : SerializeField] public float DroneCoolDown { get; set; } = 3.0f; 
     [field: SerializeField] public int DroneDamage { get; set; } = 10;
     [field: SerializeField] public float DroneLifeTime { get; set; } = 2;
     [field: SerializeField] public float DroneSpeed { get; set; } = 10;

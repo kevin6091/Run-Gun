@@ -26,7 +26,7 @@ public class Gun : MonoBehaviour
 
     private void Awake()
     {
-        _muzzleFlash.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+        _muzzleFlash.Stop(true);
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -44,7 +44,7 @@ public class Gun : MonoBehaviour
         while(accTime > 0.5f)
         {
             accTime -= 0.5f;
-            Fire();
+            //Fire();
         }
     }
 
@@ -73,7 +73,7 @@ public class Gun : MonoBehaviour
         if(_muzzleFlash != null)
         {
             _muzzleFlash.transform.position = _gunFire.transform.position;
-            _muzzleFlash.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            _muzzleFlash.Stop(true);
 
             _muzzleFlash.Play();
         }

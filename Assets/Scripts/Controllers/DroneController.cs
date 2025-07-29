@@ -9,47 +9,33 @@ using NUnit.Framework;
 using System.Collections;
 using UnityEngine.Splines.Interpolators;
 
-public class DroneController : MonoBehaviour, IComparable<DroneController>
+public class DroneController : MonoBehaviour
 {
     private float _separationRadius = 2.5f;
     private float _neighborRadius = 5.0f;
     private float _separationWeight = 1.0f;
     private float _alignmentWeight = 1.0f;
-    private float _cohesionWeight = 1.0f;
+    private float _cohesionWeight = 1.2f;
     private float _leaderWeight = 1.8f;
     private float _toTargetForLeaderWeight = 1.5f;
+    private float _accTime = 0.0f;
+    private bool _boolean = false;
 
-    static DroneController _leader = null;
-
+    public float DistanceToTarget { get; set; }
     public Vector3 Velocity { get; set; }
-
-    static public List<DroneController> Drones { get; set; } = new List<DroneController>();
-    static public Vector3 DroneTarget { get; set; }
-
     Player Player { get; set; }
 
-    float accTime = 0.0f;
-    bool boolean = false;
-
-    public int CompareTo(DroneController other)
-    {
-        float myDist = (DroneTarget - transform.position).magnitude;
-        float otherDist = (DroneTarget - other.transform.position).magnitude;
-        return (DroneTarget - transform.position).magnitude.CompareTo(otherDist);
-    }
-
-    private void OnDisable()
-    {
-        Drones.Remove(this);
-    }
+    static DroneController _leader = null;
+    static public Vector3 DroneTarget { get; set; }
 
     void Start()
     {
         Player = (Managers.Scene.CurrentScene as GameScene).GamePlayer;
-        Drones.Add(this);
+        transform.position = Player.transform.position + new Vector3(0.0f, 8.0f, -8.0f);
 
-        if(_leader == null) //한번밖에 실행안되는 곳 / Static변수 다루기
+        if (_leader == null) //한번밖에 실행안되는 곳 / Static변수 다루기
         {
+            _leader = this;
             StartCoroutine(Co_SortLeader());
             StartCoroutine(Co_MoveTarget());
         }
@@ -58,7 +44,7 @@ public class DroneController : MonoBehaviour, IComparable<DroneController>
     void Update()
     {
         DroneTarget = Player.transform.position + new Vector3(0.0f, 5.0f, -2.0f);
-
+        DistanceToTarget = (DroneTarget - transform.position).magnitude;
         Velocity = (DroneTarget - transform.position).normalized;
 
         Vector3 movement = CalculateFlocking();
@@ -116,19 +102,21 @@ public class DroneController : MonoBehaviour, IComparable<DroneController>
 
         int neighborCount = 0;
 
-        foreach (DroneController ele in Drones)
+        foreach (Drone ele in Drone.Drones)
         {
-            if (ele == _leader && ele == this)
+            DroneController eleController = ele.DroneController;
+
+            if (eleController == _leader && eleController == this)
             {
                 toTargetForLeader = (DroneTarget - transform.position);
             }
 
-            if (ele == this)
+            if (eleController == this)
             {
                 continue;
             }
 
-            float distance = Vector3.Distance(transform.position, ele.transform.position);
+            float distance = Vector3.Distance(transform.position, eleController.transform.position);
             if (distance == 0.0f)
             {
                 distance = 0.1f;
@@ -136,13 +124,13 @@ public class DroneController : MonoBehaviour, IComparable<DroneController>
 
             // Separation: 가까우면 멀어지기
             if (distance < _separationRadius)
-                separation -= (ele.transform.position - transform.position).normalized / distance; // 더 가까울수록 더 강하게
+                separation -= (eleController.transform.position - transform.position).normalized / distance; // 더 가까울수록 더 강하게
 
             // Alignment & Cohesion: neighborRadius 내의 모든 드론
             if (distance < _neighborRadius)
             {
-                alignment += ele.Velocity;
-                cohesion += ele.transform.position;
+                alignment += eleController.Velocity;
+                cohesion += eleController.transform.position;
                 neighborCount++;
             }
         }
@@ -171,10 +159,12 @@ public class DroneController : MonoBehaviour, IComparable<DroneController>
 
     IEnumerator Co_SortLeader()
     {
+        yield return null;
+
         while (true)
         {
-            Drones.Sort();
-            _leader = Drones[0];
+            Drone.Drones.Sort();
+            _leader = Drone.Drones[0].DroneController;
 
             yield return new WaitForSeconds(1.0f);
         }
@@ -184,27 +174,27 @@ public class DroneController : MonoBehaviour, IComparable<DroneController>
     {
         while (true)
         {
-            if (accTime <= -1.0f && boolean == false)
+            if (_accTime <= -1.0f && _boolean == false)
             {
-                boolean = true;
+                _boolean = true;
                 yield return new WaitForSeconds(3.0f);
             }
-            else if (accTime >= 1.0f && boolean == true)
+            else if (_accTime >= 1.0f && _boolean == true)
             {
-                boolean = false;
+                _boolean = false;
                 yield return new WaitForSeconds(3.0f);
             }
 
-            if (boolean == true)
+            if (_boolean == true)
             {
-                accTime += Time.deltaTime * Time.deltaTime * 30.0f;
+                _accTime += Time.deltaTime * Time.deltaTime * 15.0f;
             }
             else
             {
-                accTime -= Time.deltaTime * Time.deltaTime * 30.0f;
+                _accTime -= Time.deltaTime * Time.deltaTime * 15.0f;
             }
 
-            DroneTarget = new Vector3(DroneTarget.x, DroneTarget.y, DroneTarget.z + accTime * 5.0f);
+            DroneTarget = new Vector3(DroneTarget.x, DroneTarget.y, DroneTarget.z + _accTime * 5.0f);
 
             yield return null;
         }

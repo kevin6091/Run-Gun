@@ -87,11 +87,11 @@ MonoBehaviour:
   <Defence>k__BackingField: 0
   <GunCoolDown>k__BackingField: 1
   <GunDamage>k__BackingField: 10
-  <GunDistance>k__BackingField: 10
+  <GunLifeTime>k__BackingField: 2
   <GunSpeed>k__BackingField: 10
-  <DroneCoolDown>k__BackingField: 1
+  <DroneCoolDown>k__BackingField: 3
   <DroneDamage>k__BackingField: 10
-  <DroneDistance>k__BackingField: 10
+  <DroneLifeTime>k__BackingField: 2
   <DroneSpeed>k__BackingField: 10
   <NumDrone>k__BackingField: 0
   <TankCoolDown>k__BackingField: 1
